@@ -20,7 +20,7 @@ namespace MC_SVSkillPointPerLevel
             Harmony.CreateAndPatchAll(typeof(Main));
 
             pointsPerLevel = Config.Bind<float>("1. Settings",
-                "Points per level: ",
+                "Points per level",
                 2.0f,
                 "Skill points per level (can be decimal).");
 
@@ -38,7 +38,7 @@ namespace MC_SVSkillPointPerLevel
             float curRemainder = remainder.Value + (pointsPerLevel.Value - pointsToAdd);
             int remainderPoints = 0;
 
-            if (curRemainder > 1)
+            if (curRemainder >= 1)
                 remainderPoints = Mathf.FloorToInt(curRemainder);
 
             pointsToAdd += remainderPoints;
