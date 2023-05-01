@@ -27,7 +27,7 @@ Change points per level to whatever you want.
   
 [1. Settings]
 
-## Skill points per level (can be decimal).
-# Setting type: Single
-# Default value: 2
+Skill points per level (can be decimal).
+Setting type: Single
+Default value: 2
 Points per level = 2.0
