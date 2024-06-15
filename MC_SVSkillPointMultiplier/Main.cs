@@ -10,7 +10,7 @@ namespace MC_SVSkillPointPerLevel
     {
         public const string pluginGuid = "mc.starvalor.skillpointperlevel";
         public const string pluginName = "SV Skill Point Per Level";
-        public const string pluginVersion = "1.0.0";
+        public const string pluginVersion = "1.0.1";
 
         public static ConfigEntry<float> pointsPerLevel;
         public static ConfigEntry<float> remainder;
@@ -45,6 +45,30 @@ namespace MC_SVSkillPointPerLevel
             remainder.Value = curRemainder - remainderPoints;
 
             __instance.skillPoints += pointsToAdd - 1;
+        }
+
+        [HarmonyPatch(typeof(PlayerCharacter), nameof(PlayerCharacter.ResetSkills))]
+        [HarmonyPrefix]
+        private static void PlayerCharacterReset_Pre(bool forceIt, PlayerCharacter __instance, out bool __state)
+        {
+            if (forceIt || __instance.resetSkillsPoints != 0)
+                __state = true;
+            else
+                __state = false;
+        }
+
+        [HarmonyPatch(typeof(PlayerCharacter), nameof(PlayerCharacter.ResetSkills))]
+        [HarmonyPostfix]
+        private static void PlayerCharacterReset_Post(PlayerCharacter __instance, bool __state)
+        {
+            if (__state)
+            {
+                float points = ((__instance.level - 1) * pointsPerLevel.Value) + 1;
+                int pointsI = Mathf.FloorToInt(points);
+                remainder.Value = points - pointsI;
+
+                __instance.skillPoints = pointsI;
+            }
         }
     }
 }
